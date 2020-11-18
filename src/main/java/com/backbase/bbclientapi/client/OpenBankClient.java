@@ -1,13 +1,13 @@
 package com.backbase.bbclientapi.client;
 
 import com.backbase.bbclientapi.model.OpenBankTransactions;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@Log
+@Slf4j
 public class OpenBankClient {
 
     private static final String OPEN_BANK_API_ROOT_URL = "https://apisandbox.openbankproject.com/obp/v1.2.1";
@@ -17,7 +17,7 @@ public class OpenBankClient {
     public OpenBankTransactions consumeApi() {
         ResponseEntity<OpenBankTransactions> openBankTransactionsResponseEntity = restTemplate.getForEntity(OPEN_BANK_API_ROOT_URL + TRANSACTION_LIST_URL, OpenBankTransactions.class);
 
-        log.info(openBankTransactionsResponseEntity.toString());
+        log.trace(openBankTransactionsResponseEntity.toString());
 
         return openBankTransactionsResponseEntity.getBody();
     }

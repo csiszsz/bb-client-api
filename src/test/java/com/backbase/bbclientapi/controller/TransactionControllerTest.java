@@ -1,5 +1,6 @@
 package com.backbase.bbclientapi.controller;
 
+import com.backbase.bbclientapi.exception.TransactionNotFoundException;
 import com.backbase.bbclientapi.model.BackbaseTransaction;
 import com.backbase.bbclientapi.service.TransactionService;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class TransactionControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    void list() throws Exception {
+    void listShouldReturnOk() throws Exception {
         BackbaseTransaction backbaseTransaction1 = new BackbaseTransaction();
         backbaseTransaction1.setId("123");
 
@@ -52,7 +53,7 @@ class TransactionControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    void filter() throws Exception {
+    void filterShouldReturnOk() throws Exception {
         BackbaseTransaction backbaseTransaction1 = new BackbaseTransaction();
         backbaseTransaction1.setId("123");
         backbaseTransaction1.setTransactionType("CASH");
@@ -70,12 +71,34 @@ class TransactionControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    void total() throws Exception {
+    void filterShouldReturnNotFound() throws Exception {
+
+        given(transactionService.filterByType("CASH")).willThrow(new TransactionNotFoundException("Couldn't find transaction"));
+
+        mvc.perform(get("/transactions/filter")
+                .queryParam("type", "CASH")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void totalShouldReurnOk() throws Exception {
         given(transactionService.total("SEPA")).willReturn(new BigDecimal(42));
 
         mvc.perform(get("/transactions/total/SEPA")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$['total']", is(42)));
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void totalShouldReurnNotFound() throws Exception {
+        given(transactionService.total("SEPA")).willThrow(new TransactionNotFoundException("Couldn't find transaction"));
+
+        mvc.perform(get("/transactions/total/SEPA")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

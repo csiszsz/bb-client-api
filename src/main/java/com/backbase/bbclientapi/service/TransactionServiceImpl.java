@@ -1,10 +1,12 @@
 package com.backbase.bbclientapi.service;
 
 import com.backbase.bbclientapi.client.OpenBankClient;
+import com.backbase.bbclientapi.exception.TransactionNotFoundException;
 import com.backbase.bbclientapi.model.BackbaseTransaction;
 import com.backbase.bbclientapi.model.OpenBankTransactions;
 import com.backbase.bbclientapi.model.mapper.TransactionMapper;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Log
+@Slf4j
 public class TransactionServiceImpl implements TransactionService {
 
     private OpenBankClient openBankClient;
@@ -30,9 +32,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<BackbaseTransaction> filterByType(String type) {
-        return list().stream()
+        List<BackbaseTransaction> backbaseTransactions = list().stream()
                 .filter(backbaseTransaction -> backbaseTransaction.getTransactionType().equals(type))
                 .collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(backbaseTransactions)) {
+            String message = String.format("Could not find transaction with type: '%s'", type);
+            log.debug(message);
+            throw new TransactionNotFoundException(message);
+        }
+        return backbaseTransactions;
     }
 
     @Override

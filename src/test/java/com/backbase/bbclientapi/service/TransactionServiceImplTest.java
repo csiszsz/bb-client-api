@@ -1,6 +1,7 @@
 package com.backbase.bbclientapi.service;
 
 import com.backbase.bbclientapi.client.OpenBankClient;
+import com.backbase.bbclientapi.exception.TransactionNotFoundException;
 import com.backbase.bbclientapi.model.BackbaseTransaction;
 import com.backbase.bbclientapi.model.OpenBankTransaction;
 import com.backbase.bbclientapi.model.OpenBankTransactions;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -102,9 +104,19 @@ class TransactionServiceImplTest {
     }
 
     @Test
+    void shouldThrowTransactionNotFoundExceptionFilteringByUnkonwn() {
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.filterByType("Unknown"));
+    }
+
+    @Test
     void totalReturnTotalAmountForTransactionTypeSepa() {
         BigDecimal total = transactionService.total("SEPA");
 
         assertEquals(new BigDecimal(110), total);
+    }
+
+    @Test
+    void shouldThrowTransactionNotFoundExceptionTotalByUnkonwn() {
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.total("unknown"));
     }
 }
