@@ -19,6 +19,9 @@ For building and running the application you need:
 ## Build without tests
 `mvn clean install -DskipTests`
 
+## Run project
+mvn spring-boot:run`
+
 ## Build Docker image
 `docker build -t {image_name} .`
 
