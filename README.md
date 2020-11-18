@@ -26,3 +26,6 @@ For building and running the application you need:
 `docker run -p 8080:8080 {image_name}`
 ___
 ### See [Swagger UI](http://localhost:8080/swagger-ui/) on your localhost for the API docs
+## API user credentials
+- username: backbase
+- password: secret
