@@ -20,7 +20,7 @@ For building and running the application you need:
 `mvn clean install -DskipTests`
 
 ## Run project
-mvn spring-boot:run`
+`mvn spring-boot:run`
 
 ## Build Docker image
 `docker build -t {image_name} .`
