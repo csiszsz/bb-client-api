@@ -83,7 +83,7 @@ class TransactionControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    void totalShouldReurnOk() throws Exception {
+    void totalShouldReturnOk() throws Exception {
         given(transactionService.total("SEPA")).willReturn(new BigDecimal(42));
 
         mvc.perform(get("/transactions/total/SEPA")
@@ -94,7 +94,7 @@ class TransactionControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    void totalShouldReurnNotFound() throws Exception {
+    void totalShouldReturnNotFound() throws Exception {
         given(transactionService.total("SEPA")).willThrow(new TransactionNotFoundException("Couldn't find transaction"));
 
         mvc.perform(get("/transactions/total/SEPA")

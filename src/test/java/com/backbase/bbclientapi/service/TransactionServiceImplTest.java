@@ -104,7 +104,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void shouldThrowTransactionNotFoundExceptionFilteringByUnkonwn() {
+    void shouldThrowTransactionNotFoundExceptionFilteringByUnknown() {
         assertThrows(TransactionNotFoundException.class, () -> transactionService.filterByType("Unknown"));
     }
 
@@ -116,7 +116,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void shouldThrowTransactionNotFoundExceptionTotalByUnkonwn() {
-        assertThrows(TransactionNotFoundException.class, () -> transactionService.total("unknown"));
+    void shouldThrowTransactionNotFoundExceptionTotalByUnknown() {
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.total("Unknown"));
     }
 }
