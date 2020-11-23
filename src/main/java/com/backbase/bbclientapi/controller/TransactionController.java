@@ -6,6 +6,9 @@ import com.backbase.bbclientapi.dto.TransactionTotalDto;
 import com.backbase.bbclientapi.dto.mapper.TransactionDtoMapper;
 import com.backbase.bbclientapi.model.BackbaseTransaction;
 import com.backbase.bbclientapi.service.TransactionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transactions")
+@Api(description = "Set of endpoints for retrieving transactions")
 @Slf4j
 public class TransactionController {
 
@@ -24,6 +28,7 @@ public class TransactionController {
     }
 
     @GetMapping("/list")
+    @ApiOperation(value = "Endpoint for listing transactions")
     public TransactionListDto list() {
         List<BackbaseTransaction> backbaseTransactions = transactionService.list();
 
@@ -34,7 +39,11 @@ public class TransactionController {
     }
 
     @GetMapping("/filter")
-    public TransactionListDto filter(@RequestParam String type) {
+    @ApiOperation(value = "Endpoint for filtering transactions by type")
+    public TransactionListDto filter(
+            @RequestParam
+            @ApiParam(value = "Type of transaction", required = true)
+                    String type) {
         List<BackbaseTransaction> backbaseTransactions = transactionService.filterByType(type);
 
         log.info("Retrieving transactions: {}", backbaseTransactions);
@@ -44,7 +53,11 @@ public class TransactionController {
     }
 
     @GetMapping("/total/{type}")
-    public TransactionTotalDto total(@PathVariable String type) {
+    @ApiOperation(value = "Endpoint for calculating the total amount for the transaction type")
+    public TransactionTotalDto total(
+            @PathVariable
+            @ApiParam(value = "Type of transaction", required = true)
+                    String type) {
         BigDecimal total = transactionService.total(type);
 
         log.info("Total amount: {}", total);
